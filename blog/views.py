@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Post
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from .forms import EmailPostForm
 
 def post_list(request):
     post_list = Post.published.all()
@@ -27,3 +28,17 @@ def post_detail(request, year, month, day, post):
                              publish__month = month,
                              publish__day = day)
     return render(request, "blog/post/detail.html", {"post" : post})
+
+def post_share(request, post_id):
+    # Отримати пост за ідентифікатором id
+    post = get_object_or_404(Post, id=post_id, status=Post.Status.PUBLISHED)
+    if request.method == "POST":
+        # Форма була передана на обробку
+        form = EmailPostForm(request.POST)
+        if form.is_valid():
+            # Поля форми успішно пройшли валідацію
+            cd = form.cleaned_data
+            # ... надіслати електронний лист
+    else:
+        form = EmailPostForm()
+        return render(request, 'blog/post/share.html', {'post':post, 'form':form})
