@@ -6,9 +6,10 @@
         Опубліковано {{ post.publish }} автором {{ post.author }}
     </p>
     {{ post.body|linebreaks }}
-    <p>
-        <a href="{% url 'blog:post_share' post.id %}">
-            Share this post
-        </a>
-    </p>
+    <a href="{% url 'blog:post_share' post.id %}" class="btn-17">
+        <span class="text-container">
+            <span class="text">Share this post</span>
+        </span>
+    </a>
+
 {% endblock %}
