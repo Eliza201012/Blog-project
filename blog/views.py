@@ -4,6 +4,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import EmailPostForm
 from django.core.mail import send_mail
 from django.conf import settings
+from django.http import HttpResponseRedirect
 
 def post_list(request):
     post_list = Post.published.all()
@@ -44,14 +45,15 @@ def post_share(request, post_id):
             cd = form.cleaned_data
             post_url = request.build_absolute_uri(
                 post.get_absolute_url())
-            subject = f"{cd['name']} recommends you read" \
+            subject = f"{cd['name']} recommends you read " \
                     f"{post.title}"
             message = f"Read {post.title} at {post_url}\n\n" \
-                    f"{cd['name']}\'s ({cd['email']}) comments: {cd['comments']}"
+                    f"{cd['name']}\'s ({cd['email']}) \ncomments: {cd['comments']}"
             send_mail(subject, message, settings.EMAIL_HOST_USER,
                       [cd['to']])
             sent = True
             # ... надіслати електронний лист
+        return HttpResponseRedirect("/")
     else:
         form = EmailPostForm()
         return render(request, 'blog/post/share.html', {'post':post, 'form':form, 'sent':sent})
