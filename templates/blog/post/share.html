@@ -14,7 +14,11 @@
         <form method="post">
             {{ form.as_p }}
             {% csrf_token %}
-            <input type="submit" value="Send e-mail">
+            <button type="submit" class="btn-17">
+                <span class="text-container">
+                    <span class="text">Send e-mail</span>
+                </span>
+            </button>
         </form>
     {% endif %}
 {% endblock %}
